@@ -3,6 +3,7 @@ import json
 
 # imports for PyJWT authentication
 from .Models.student import Student
+from .Models.classroom import Classroom
 
 students_controller = Blueprint("students_controller", __name__, static_folder="Controllers")
 
@@ -26,7 +27,7 @@ def get_all_students():
 		# to the response list
 		output.append({
 			'userId': student.userId,
-			'classroomCode': student.classroomCode
+			'classroomId': student.classroomId
 		})
 
 	return jsonify(output)
@@ -34,11 +35,18 @@ def get_all_students():
 
 @students_controller.route('/', methods=['POST'])
 @students_controller.route('', methods=['POST'])
-# @token_required
+# @token_required(allowedRole="Student")
 def create_student():
 	new_student = request.get_json()
 	data = dict(new_student)
-	student = Student(**data)
+
+	classroom = Classroom.query.filter(Classroom.classroomCode == data['classroomCode']).first()
+
+	if not classroom:
+		return make_response({'message': 'Invalid classroomCode'}, 400)
+
+	student = Student(userId=data['userId'], classroomId=classroom.id)
+
 	db.session.add(student)
 	db.session.commit()
 	return make_response(student.serialize())

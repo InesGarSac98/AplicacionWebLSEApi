@@ -10,6 +10,7 @@ class User(db.Model):
     name = Column(String(100))
     password = Column(String(100))
     email = Column(String(70), unique=True)
+    role = Column(String(15))
 
     def serialize(self):
         return {
@@ -17,4 +18,5 @@ class User(db.Model):
             'name': self.name,
             'password': self.password,
             'email': self.email,
+            'role': self.role,
         }

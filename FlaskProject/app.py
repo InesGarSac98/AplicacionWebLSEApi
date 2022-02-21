@@ -1,6 +1,7 @@
 # flask imports
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'z_u?UN7pNcs9xW$rheYqnpxhn_&8j5uy'
@@ -14,14 +15,20 @@ db = SQLAlchemy(app)
 from Controllers.users_controller import users_controller
 from Controllers.teachers_controller import teachers_controller
 from Controllers.students_controller import students_controller
-#from Controllers.studentAvailableGame_controller import studentAvailableGame_controller
+from Controllers.classrooms_controller import classrooms_controller
 from Controllers.words_controller import words_controller
+from Controllers.games_controller import games_controller
+from Controllers.classroomsGames_controller import classroomGames_controller
+from Controllers.classroomsWords_controller import classroomWords_controller
 
 app.register_blueprint(users_controller, url_prefix="/api/users")
 app.register_blueprint(teachers_controller, url_prefix="/api/teachers")
 app.register_blueprint(students_controller, url_prefix="/api/students")
-#app.register_blueprint(studentAvailableGame_controller, url_prefix="/api/studentsAvailableGame")
+app.register_blueprint(classrooms_controller, url_prefix="/api/classrooms")
 app.register_blueprint(words_controller, url_prefix="/api/words")
+app.register_blueprint(games_controller, url_prefix="/api/games")
+app.register_blueprint(classroomGames_controller, url_prefix="/api/classroomGames")
+app.register_blueprint(classroomWords_controller, url_prefix="/api/classroomWords")
 
 if __name__ == "__main__":
 	# setting debug to True enables hot reload

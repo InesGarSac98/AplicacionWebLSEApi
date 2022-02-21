@@ -9,7 +9,8 @@ users_controller = Blueprint("users_controller", __name__, static_folder="Contro
 from .Models.user import User
 from app import db, config
 
-from .Services.token_services import token_required
+from .Services.token_services import token_required, token_required_get_user_id
+
 
 #Lista de los usuarios
 @users_controller.route('/', methods=['GET'])
@@ -34,7 +35,7 @@ def create_user():
 	data = dict(new_user)
 	hashed_password = generate_password_hash(data['password'], method='sha256')
 
-	user = User(name=data['name'], password=hashed_password, email=data['email'])
+	user = User(name=data['name'], password=hashed_password, email=data['email'], role=data['role'])
 	db.session.add(user)
 	db.session.commit()
 	return make_response(user.serialize())
@@ -57,6 +58,7 @@ def login_user():
 		token = jwt.encode(
 			{
 				'user_id': user.id,
+				'role': user.role,
 				'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)
 			},
 			config['SECRET_KEY']
@@ -69,20 +71,21 @@ def login_user():
 
 @users_controller.route('/user-loged', methods=['GET'])
 @users_controller.route('/user-loged/', methods=['GET'])
-@token_required
+@token_required_get_user_id
 # def get_all_users(current_user):
 def get_user_logged(current_user_id):
 	user = User.query.filter_by(id=current_user_id).first()
 
 	return jsonify({
 			'name': user.name,
-			'email': user.email
+			'email': user.email,
+			'id': user.id,
+			'role': user.role
 		})
 
 
 @users_controller.route('/validate-token', methods=['POST'])
 @users_controller.route('/validate-token/', methods=['POST'])
 @token_required
-# def get_all_users(current_user):
-def validate_token(current_user_id):
+def validate_token():
 	return make_response('', 200)
