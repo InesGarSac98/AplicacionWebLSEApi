@@ -10,7 +10,7 @@ from app import db
 
 @words_controller.route('/', methods=['GET'])
 @words_controller.route('', methods=['GET'])
-@allow_only_teachers
+@token_required
 def get_all_words():
     words = Words.query.all()
     output = []

@@ -5,7 +5,7 @@ import json
 
 # imports for PyJWT authentication
 from .Models.classroom import Classroom
-from .Services.token_services import allow_only_teachers
+from .Services.token_services import allow_only_teachers, token_required
 
 classrooms_controller = Blueprint("classrooms_controller", __name__, static_folder="Controllers")
 
@@ -28,6 +28,20 @@ def get_all_classrooms():
 		})
 
 	return jsonify(output)
+
+
+@classrooms_controller.route('/<id>/', methods=['GET'])
+@classrooms_controller.route('/<id>', methods=['GET'])
+@token_required
+def get_classroom(id):
+	classroom = Classroom.query.filter(Classroom.id == id).first()
+
+	return jsonify({
+		'id': classroom.id,
+		'teacherId': classroom.teacherId,
+		'name': classroom.name
+	})
+
 
 
 @classrooms_controller.route('/', methods=['POST'])
@@ -72,7 +86,7 @@ def get_all_classroom_students(classroom_id):
 
 
 @classrooms_controller.route('/<classroom_id>/words', methods=['GET'])
-@allow_only_teachers
+@token_required
 def get_all_classroom_words(classroom_id):
 	classroom = Classroom.query.filter(Classroom.id == classroom_id).first()
 
@@ -92,3 +106,25 @@ def get_all_classroom_words(classroom_id):
 		})
 
 	return jsonify(output)
+
+
+@classrooms_controller.route('/<classroom_id>/games', methods=['GET'])
+@token_required
+def get_all_classroom_games(classroom_id):
+	classroom = Classroom.query.filter(Classroom.id == classroom_id).first()
+
+	output = []
+	for classroomGame in classroom.ClassroomGames:
+		output.append({
+			'id': classroomGame.id,
+			'gameId': classroomGame.gameId,
+			'game': {
+				'id': classroomGame.Game.id,
+				'name': classroomGame.Game.name,
+				'image': classroomGame.Game.image
+			},
+			'classroomId': classroomGame.classroomId
+		})
+
+	return jsonify(output)
+

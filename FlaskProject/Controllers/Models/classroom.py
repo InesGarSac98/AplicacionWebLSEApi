@@ -13,6 +13,7 @@ class Classroom(db.Model):
     Teacher = relationship('Teacher')
     Students = relationship('Student', back_populates="Classroom")
     ClassroomWords = relationship('ClassroomWords', back_populates="Classroom")
+    ClassroomGames = relationship('ClassroomGames', back_populates="Classroom")
 
     def serialize(self):
         return {

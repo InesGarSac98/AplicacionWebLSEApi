@@ -10,7 +10,7 @@ class ClassroomGames(db.Model):
     classroomId = Column(Integer, ForeignKey('Classroom.id'))
     gameId = Column(Integer, ForeignKey('Games.id'))
     Classroom = relationship('Classroom')
-    Games = relationship('Games')
+    Game = relationship('Games')
 
     def serialize(self):
         return {
