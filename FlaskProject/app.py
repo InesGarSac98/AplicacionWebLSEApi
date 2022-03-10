@@ -21,6 +21,7 @@ from Controllers.games_controller import games_controller
 from Controllers.classroomsGames_controller import classroomGames_controller
 from Controllers.classroomsWords_controller import classroomWords_controller
 from Controllers.gameEvent_controller import gameEvent_controller
+from Controllers.quizzGameQuestions_controller import quizzGameQuestions_controller
 
 app.register_blueprint(users_controller, url_prefix="/api/users")
 app.register_blueprint(teachers_controller, url_prefix="/api/teachers")
@@ -31,6 +32,7 @@ app.register_blueprint(games_controller, url_prefix="/api/games")
 app.register_blueprint(classroomGames_controller, url_prefix="/api/classroomGames")
 app.register_blueprint(classroomWords_controller, url_prefix="/api/classroomWords")
 app.register_blueprint(gameEvent_controller, url_prefix="/api/gameEvents")
+app.register_blueprint(quizzGameQuestions_controller, url_prefix="/api/quizzGameQuestions")
 
 if __name__ == "__main__":
 	# setting debug to True enables hot reload
