@@ -12,6 +12,8 @@ class GameEvent(db.Model):
     status = Column(Integer, nullable=False)
     date = Column(DateTime, nullable=False)
     leftTime = Column(Float, nullable=False)
+    gamePlayId = Column(Integer, nullable=False)
+    score = Column(Integer, nullable=False)
     events = Column(Text, nullable=False)
 
     def serialize(self):
@@ -22,5 +24,7 @@ class GameEvent(db.Model):
             'status': self.status,
             'date': self.date,
             'leftTime': self.leftTime,
+            'gamePlayId': self.gamePlayId,
+            'score': self.score,
             'events': self.events
         }

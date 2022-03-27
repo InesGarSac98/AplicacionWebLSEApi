@@ -21,6 +21,14 @@ def create_gameEvent():
 	gameEvent = GameEvent(**data)
 	gameEvent.date = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S.%f%z')
 
+	if gameEvent.status == 0:
+		gameEventWithMaxGamePlayId = GameEvent.query.order_by(GameEvent.gamePlayId.desc()).first()
+		if not gameEventWithMaxGamePlayId:
+			gameplayId = 1
+		else:
+			gameplayId = gameEventWithMaxGamePlayId.gamePlayId + 1
+		gameEvent.gamePlayId = gameplayId
+
 	db.session.add(gameEvent)
 	db.session.commit()
 	return make_response(gameEvent.serialize())
