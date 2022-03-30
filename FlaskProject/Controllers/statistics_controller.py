@@ -32,10 +32,10 @@ def get_all_classrooms():
 	return jsonify(output)
 
 
-@statistics_controller.route('/student/<studentid>/', methods=['GET'])
-@statistics_controller.route('/student/<studentid>', methods=['GET'])
+@statistics_controller.route('/student/<int:studentid>/', methods=['GET'])
+@statistics_controller.route('/student/<int:studentid>', methods=['GET'])
 @token_required
-def get_classroom(studentid):
+def get_student_statistics(studentid):
 	sql = text('''
 		SELECT
 			(
@@ -64,4 +64,34 @@ def get_classroom(studentid):
 	return jsonify(statisticsResult)
 
 
+@statistics_controller.route('/classroom/<int:classroomid>/', methods=['GET'])
+@statistics_controller.route('/classroom/<int:classroomid>', methods=['GET'])
+@token_required
+def get_classroom_statistics(classroomid):
+	sql2 = text('''
+		SELECT
+			(
+				(SELECT leftTime FROM GameEvents g2 JOIN Student s2 ON g2.studentId = s2.Id
+					WHERE s2.classroomId = :classroomid AND status = 0 AND g1.gameplayId = g2.gameplayId)
+				- (SELECT leftTime FROM GameEvents g2 JOIN Student s2 ON g2.studentId = s2.Id
+					WHERE s2.classroomId = :classroomid AND status IN (2, 3, 4) AND g1.gameplayId = g2.gameplayId)
+			) as duration,
+			g1.date,
+			g1.status,
+			g1.score
+			FROM GameEvents g1
+			JOIN Student s1 ON g1.studentId = s1.Id
+			WHERE s1.classroomId = :classroomid AND status IN (2, 3, 4)
+	''')
+	result = db.engine.execute(sql2, {'classroomid': classroomid + 0})
 
+	statisticsResult = []
+	for row in result:
+		statisticsResult.append({
+			'duration': row[0],
+			'date': row[1],
+			'status': row[2],
+			'score': row[3]
+		})
+
+	return jsonify(statisticsResult)
