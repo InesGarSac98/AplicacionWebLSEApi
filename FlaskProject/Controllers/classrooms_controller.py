@@ -43,7 +43,6 @@ def get_classroom(id):
 	})
 
 
-
 @classrooms_controller.route('/', methods=['POST'])
 @classrooms_controller.route('', methods=['POST'])
 @allow_only_teachers

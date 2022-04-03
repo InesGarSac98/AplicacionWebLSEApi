@@ -8,8 +8,8 @@ class QuizzGameQuestion(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     wordId = Column(Integer, ForeignKey('Words.id'))
-    gameId = Column(Integer, ForeignKey('Games.id'))
-    showImage = Column(Boolean)
+    quizzGameClassroomConfigurationId = Column(Integer, ForeignKey('QuizzGameClassroomConfiguration.id'))
+    isImage = Column(Boolean)
     Answers = relationship('QuizzGameAnswer')
     Word = relationship('Words')
 
@@ -21,11 +21,10 @@ class QuizzGameQuestion(db.Model):
             'id': self.id,
             'name': self.name,
             'wordId': self.wordId,
-            'gameId': self.gameId,
-            'showImage': self.showImage,
+            'quizzGameClassroomConfigurationId':self.quizzGameClassroomConfigurationId,
+            'isImage': self.isImage,
             'answers': serializedAnswers,
             'word': self.Word.serialize()
-
         }
 
 

@@ -6,21 +6,19 @@ from sqlalchemy.orm import relationship
 class QuizzGameAnswer(db.Model):
     __tablename__ = 'QuizzGameAnswers'
     id = Column(Integer, primary_key=True)
-    name = Column(String(255))
-    correct = Column(Boolean)
+    isCorrect = Column(Boolean)
     questionId = Column(Integer, ForeignKey('QuizzGameQuestions.id'))
-    showImage = Column(Boolean)
     wordId = Column(Integer, ForeignKey('Words.id'))
+    isImage = Column(Boolean)
     Word = relationship('Words')
 
     def serialize(self):
         return {
             'id': self.id,
-            'name': self.name,
-            'correct': self.correct,
+            'isCorrect': self.isCorrect,
             'questionId': self.questionId,
-            'showImage': self.showImage,
             'wordId': self.wordId,
+            'isImage': self.isImage,
             'word': self.Word.serialize()
         }
 
