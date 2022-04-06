@@ -37,8 +37,8 @@ def create_quizzConfiguration():
 	return make_response(quizzConfiguration.serialize())
 
 
-@quizzGameClassroomConfiguration_controller.route('/<configuration_id>', methods=['PUT'])
-@quizzGameClassroomConfiguration_controller.route('<configuration_id>', methods=['PUT'])
+@quizzGameClassroomConfiguration_controller.route('/<int:configuration_id>', methods=['PUT'])
+@quizzGameClassroomConfiguration_controller.route('<int:configuration_id>', methods=['PUT'])
 def update_quizzGameQuestion(configuration_id):
 	new_quizzGameConfig = request.get_json()
 	data = dict(new_quizzGameConfig)
@@ -48,11 +48,11 @@ def update_quizzGameQuestion(configuration_id):
 	if quizzGameConfig.id != configuration_id:
 		make_response({}, 400)
 
-	quizzGameQuestionFromdb = QuizzGameClassroomConfiguration.query\
+	quizzGameClassroomConfiguration = QuizzGameClassroomConfiguration.query\
 		.filter(QuizzGameClassroomConfiguration.id == configuration_id)\
 		.first()
 
-	quizzGameQuestionFromdb.time = quizzGameConfig.time
+	quizzGameClassroomConfiguration.time = quizzGameConfig.time
 
 	db.session.commit()
-	return make_response(quizzGameQuestionFromdb.serialize())
+	return make_response(quizzGameClassroomConfiguration.serialize())

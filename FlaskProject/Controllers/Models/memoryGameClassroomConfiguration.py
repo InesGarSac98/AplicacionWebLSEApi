@@ -20,3 +20,4 @@ class MemoryGameClassroomConfiguration(db.Model):
 
 
 
+

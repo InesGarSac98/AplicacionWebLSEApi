@@ -22,23 +22,3 @@ class Classroom(db.Model):
             'name': self.name,
             'classroomCode': self.classroomCode
         }
-
-
-'''
-class Teacher(db.Model):
-	__tablename__ = 'Teacher'
-	id = Column(Integer, primary_key=True)
-	UserId = Column(Integer, ForeignKey('User.id'))
-	User = relationship('User')
-	Classrooms = relationship("Classroom")
-
-
-class Classroom(db.Model):
-	__tablename__ = 'Classroom'
-	id = Column(Integer, primary_key=True)
-	TeacherId = Column(Integer, ForeignKey('Teacher.id'))
- '''
-'''
-@login_manager.user_loader
-def load_user(id):
-    return User.query.get(int(id))'''

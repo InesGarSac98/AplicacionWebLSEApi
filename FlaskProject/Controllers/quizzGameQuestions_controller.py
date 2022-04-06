@@ -1,6 +1,7 @@
 from flask import jsonify, Blueprint, request, make_response
 
 # imports for PyJWT authentication
+from .Models.quizzGameAnswer import QuizzGameAnswer
 from .Models.quizzGameQuestion import QuizzGameQuestion
 from .Services.token_services import token_required
 
@@ -44,8 +45,8 @@ def create_quizzGameQuestion():
 	return make_response(quizzGameQuestion.serialize())
 
 
-@quizzGameQuestions_controller.route('/<question_id>', methods=['PUT'])
-@quizzGameQuestions_controller.route('<question_id>', methods=['PUT'])
+@quizzGameQuestions_controller.route('/<int:question_id>', methods=['PUT'])
+@quizzGameQuestions_controller.route('<int:question_id>', methods=['PUT'])
 def update_quizzGameQuestion(question_id):
 	new_quizzGameQuestion = request.get_json()
 	data = dict(new_quizzGameQuestion)
@@ -65,9 +66,11 @@ def update_quizzGameQuestion(question_id):
 	return make_response(quizzGameQuestionFromDb.serialize())
 
 
-@quizzGameQuestions_controller.route('/<question_id>', methods=['DELETE'])
-@quizzGameQuestions_controller.route('<question_id>', methods=['DELETE'])
+@quizzGameQuestions_controller.route('/<int:question_id>', methods=['DELETE'])
+@quizzGameQuestions_controller.route('<int:question_id>', methods=['DELETE'])
 def delete_quizzGameQuestion(question_id):
+	QuizzGameAnswer.query.filter(QuizzGameAnswer.questionId == question_id).delete()
+
 	QuizzGameQuestion.query.filter(QuizzGameQuestion.id == question_id).delete()
 	db.session.commit()
 	return make_response()

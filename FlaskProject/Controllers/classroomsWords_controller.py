@@ -20,8 +20,8 @@ def create_classroomWord():
 	return make_response(classroomWord.serialize())
 
 
-@classroomWords_controller.route('/<id>', methods=['DELETE'])
-@classroomWords_controller.route('<id>', methods=['DELETE'])
+@classroomWords_controller.route('/<int:id>', methods=['DELETE'])
+@classroomWords_controller.route('<int:id>', methods=['DELETE'])
 # @token_required
 def delete_classroomWord(id):
 	ClassroomWords.query.filter(ClassroomWords.id == id).delete()

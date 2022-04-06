@@ -22,8 +22,8 @@ def create_classroomGame():
 	return make_response(classroomGame.serialize())
 
 
-@classroomGames_controller.route('/<id>', methods=['DELETE'])
-@classroomGames_controller.route('<id>', methods=['DELETE'])
+@classroomGames_controller.route('/<int:id>', methods=['DELETE'])
+@classroomGames_controller.route('<int:id>', methods=['DELETE'])
 # @token_required
 def delete_classroomGame(id):
 	ClassroomGames.query.filter(ClassroomGames.id == id).delete()

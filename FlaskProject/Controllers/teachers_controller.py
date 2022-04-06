@@ -34,7 +34,7 @@ def create_teacher():
 	return make_response(teacher.serialize())
 
 
-@teachers_controller.route('/<teacher_id>/classrooms', methods=['GET'])
+@teachers_controller.route('/<int:teacher_id>/classrooms', methods=['GET'])
 @allow_only_teachers
 def get_all_teacher_classrooms(teacher_id):
 	classrooms = Classroom.query.filter(Classroom.teacherId == teacher_id).all()

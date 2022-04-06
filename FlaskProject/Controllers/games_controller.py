@@ -26,8 +26,8 @@ def get_all_games():
     return jsonify(output)
 
 
-@games_controller.route('/<gameId>/', methods=['GET'])
-@games_controller.route('/<gameId>', methods=['GET'])
+@games_controller.route('/<int:gameId>/', methods=['GET'])
+@games_controller.route('/<int:gameId>', methods=['GET'])
 @token_required
 def get_game(gameId):
     game = Games.query.filter(Games.id == gameId).first()

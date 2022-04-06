@@ -28,8 +28,8 @@ def create_quizzGameAnswer():
 	return make_response(quizzGameAnswer.serialize())
 
 
-@quizzGameAnswers_controller.route('/<answer_id>', methods=['PUT'])
-@quizzGameAnswers_controller.route('<answer_id>', methods=['PUT'])
+@quizzGameAnswers_controller.route('/<int:answer_id>', methods=['PUT'])
+@quizzGameAnswers_controller.route('<int:answer_id>', methods=['PUT'])
 def update_quizzGameAnswer(answer_id):
 	new_quizzGameAnswer = request.get_json()
 	data = dict(new_quizzGameAnswer)
