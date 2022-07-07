@@ -56,7 +56,6 @@ def create_student():
 @students_controller.route('/student-loged', methods=['GET'])
 @students_controller.route('/student-loged/', methods=['GET'])
 @token_required_get_user_id
-# def get_all_users(current_user):
 def get_student_logged(current_user_id):
 	student = Student.query.filter(Student.userId == current_user_id).first()
 
