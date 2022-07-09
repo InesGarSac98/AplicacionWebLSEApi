@@ -1,4 +1,5 @@
 from flask import jsonify, Blueprint, request, make_response
+from sqlalchemy.sql.elements import and_, or_
 
 from .Models.classroom import Classroom
 from .Models.words import Words
@@ -12,11 +13,14 @@ from app import db
 @words_controller.route('', methods=['GET'])
 @token_required
 def get_all_words():
+    teacherId = request.args.get("teacherId")
     words = Words.query.all()
+    # words = Words.query.filter(or_(Words.teacherId == teacherId, Words.teacherId is None)).all()
     output = []
     for word in words:
         output.append({
             'id': word.id,
+            'teacherId': word.teacherId,
             'name': word.name,
             'image': word.image,
             'video': word.video,
@@ -33,6 +37,7 @@ def get_word(wordname):
     word = Words.query.filter(Words.name == wordname).first()
     output = {
         'id': word.id,
+        'teacherId': word.teacherId,
         'name': word.name,
         'image': word.image,
         'video': word.video,
@@ -41,11 +46,10 @@ def get_word(wordname):
 
     return jsonify(output)
 
-
-#@words_controller.route('/', methods=['POST'])
-#@words_controller.route('', methods=['POST'])
+# @words_controller.route('/', methods=['POST'])
+# @words_controller.route('', methods=['POST'])
 ## @token_required
-#def create_word():
+# def create_word():
 #    new_word = request.get_json()
 #    data = dict(new_word)
 #    word = Words(**data)

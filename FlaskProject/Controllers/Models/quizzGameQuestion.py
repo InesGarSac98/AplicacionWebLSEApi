@@ -21,7 +21,7 @@ class QuizzGameQuestion(db.Model):
             'id': self.id,
             'name': self.name,
             'wordId': self.wordId,
-            'quizzGameClassroomConfigurationId':self.quizzGameClassroomConfigurationId,
+            'quizzGameClassroomConfigurationId': self.quizzGameClassroomConfigurationId,
             'isImage': self.isImage,
             'answers': serializedAnswers,
             'word': self.Word.serialize()

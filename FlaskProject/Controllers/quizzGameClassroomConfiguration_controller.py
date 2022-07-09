@@ -53,6 +53,7 @@ def update_quizzGameQuestion(configuration_id):
 		.first()
 
 	quizzGameClassroomConfiguration.time = quizzGameConfig.time
+	quizzGameClassroomConfiguration.numberOfQuestions = quizzGameConfig.numberOfQuestions
 
 	db.session.commit()
 	return make_response(quizzGameClassroomConfiguration.serialize())

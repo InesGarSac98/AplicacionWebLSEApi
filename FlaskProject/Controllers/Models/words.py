@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 class Words(db.Model):
 	__tablename__ = 'Words'
 	id = Column(Integer, primary_key=True)
+	teacherId = Column(Integer, ForeignKey('Teacher.id'), nullable=True)
 	name = Column(String(100))
 	image = Column(String(1000))
 	video = Column(String(1000))
@@ -15,6 +16,7 @@ class Words(db.Model):
 	def serialize(self):
 		return {
 			'id': self.id,
+			'teacherId': self.teacherId,
 			'name': self.name,
 			'image': self.image,
 			'video': self.video,

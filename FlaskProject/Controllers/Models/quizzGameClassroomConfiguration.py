@@ -9,13 +9,15 @@ class QuizzGameClassroomConfiguration(db.Model):
     classroomId = Column(Integer, ForeignKey('Classroom.id'))
     gameId = Column(Integer, ForeignKey('Games.id'))
     time = Column(Integer)
+    numberOfQuestions = Column(Integer)
 
     def serialize(self):
         return {
             'id': self.id,
             'classroomId': self.classroomId,
             'gameId': self.gameId,
-            'time': self.time
+            'time': self.time,
+            'numberOfQuestions': self.numberOfQuestions
         }
 
 
