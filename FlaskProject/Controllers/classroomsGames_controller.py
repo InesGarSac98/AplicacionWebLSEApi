@@ -1,9 +1,7 @@
-from flask import jsonify, Blueprint, request, make_response
-import json
+from flask import Blueprint, request, make_response
 
 # imports for PyJWT authentication
 from .Models.classroomGames import ClassroomGames
-from .Models.games import Games
 
 classroomGames_controller = Blueprint("classroomGames_controller", __name__, static_folder="Controllers")
 

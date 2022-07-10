@@ -3,6 +3,7 @@ from sqlalchemy.sql.elements import and_, or_
 
 from .Models.classroom import Classroom
 from .Models.words import Words
+from .Services import search_in_arasaac_service
 from .Services.token_services import token_required, allow_only_teachers
 
 words_controller = Blueprint("words_controller", __name__, static_folder="Controllers")
@@ -46,13 +47,25 @@ def get_word(wordname):
 
     return jsonify(output)
 
-# @words_controller.route('/', methods=['POST'])
-# @words_controller.route('', methods=['POST'])
-## @token_required
-# def create_word():
-#    new_word = request.get_json()
-#    data = dict(new_word)
-#    word = Words(**data)
-#    db.session.add(word)
-#    db.session.commit()
-#    return make_response(word.serialize())
+
+@words_controller.route('<word>/find-in-arasaac/', methods=['GET'])
+@words_controller.route('<word>/find-in-arasaac/', methods=['GET'])
+def findWordInArasaac_quizzGameQuestion(word):
+    arasaacWord = search_in_arasaac_service.search(word)
+
+    if arasaacWord is None:
+        return make_response({'content': 'Palabra no encontrada en ARASAAC'}, 400)
+
+    return make_response(arasaacWord, 200)
+
+
+@words_controller.route('/', methods=['POST'])
+@words_controller.route('', methods=['POST'])
+@token_required
+def create_word():
+    new_word = request.get_json()
+    data = dict(new_word)
+    word = Words(**data)
+    db.session.add(word)
+    db.session.commit()
+    return make_response(word.serialize())

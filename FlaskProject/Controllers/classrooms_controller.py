@@ -2,11 +2,7 @@ from flask import jsonify, Blueprint, request, make_response
 import random
 import string
 
-# imports for PyJWT authentication
-from selenium.webdriver.common.by import By
 from sqlalchemy import text
-from selenium.webdriver.chrome.options import Options
-from selenium import webdriver
 
 from .Models.classroom import Classroom
 
@@ -131,22 +127,6 @@ def get_all_classroom_games(classroom_id):
         })
 
     return jsonify(output)
-
-
-# @classrooms_controller.route('find-in-arasaac/<word>/', methods=['GET'])
-# @classrooms_controller.route('find-in-arasaac/<word>', methods=['GET'])
-# def findWordInArasaac_quizzGameQuestion(word):
-    #   chrome_options = Options()
-    # chrome_options.add_argument("--headless")
-
-    #  driver = webdriver.Chrome(chrome_options=chrome_options)
-    # url = 'https://arasaac.org/lse/search/' + word
-    # driver.get(url)
-
-    # print(url)
-    # response = driver.find_element(By.TAG_NAME, 'html').text
-    # print(response)
-    # return make_response({'content': response}, 200)
 
 
 @classrooms_controller.route('/<int:classroom_id>', methods=['DELETE'])
