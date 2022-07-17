@@ -16,7 +16,8 @@ class Student(db.Model):
 		return {
 			'id': self.id,
 			'userId': self.userId,
-			'classroomId': self.classroomId
+			'classroomId': self.classroomId,
+			'user': self.User.serialize()
 		}
 
 '''

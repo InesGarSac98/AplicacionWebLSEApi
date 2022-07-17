@@ -1,5 +1,5 @@
 # flask imports
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -26,6 +26,7 @@ from Controllers.quizzGameAnswers_controller import quizzGameAnswers_controller
 from Controllers.statistics_controller import statistics_controller
 from Controllers.quizzGameClassroomConfiguration_controller import quizzGameClassroomConfiguration_controller
 from Controllers.memoryGameClassroomConfiguration_controller import memoryGameClassroomConfiguration_controller
+from Controllers.student_learned_words_controller import student_learned_words_controller
 
 
 app.register_blueprint(users_controller, url_prefix="/api/users")
@@ -42,9 +43,11 @@ app.register_blueprint(quizzGameAnswers_controller, url_prefix="/api/quizzGameAn
 app.register_blueprint(statistics_controller, url_prefix="/api/statistics")
 app.register_blueprint(quizzGameClassroomConfiguration_controller, url_prefix="/api/quizzGameClassroomConfiguration")
 app.register_blueprint(memoryGameClassroomConfiguration_controller, url_prefix="/api/memoryGameClassroomConfiguration")
+app.register_blueprint(student_learned_words_controller, url_prefix="/api/studentLearnedWords")
 
 if __name__ == "__main__":
 	# setting debug to True enables hot reload
 	# and also provides a debuger shell
 	# if you hit an error while running the server
 	app.run(port = 3000, debug = True)
+

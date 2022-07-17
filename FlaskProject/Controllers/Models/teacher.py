@@ -16,6 +16,7 @@ class Teacher(db.Model):
 			'id': self.id,
 			'userId': self.userId,
 			'schoolName': self.schoolName,
+			'user': self.User.serialize()
 		}
 
 '''

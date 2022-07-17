@@ -131,7 +131,7 @@ def get_all_classroom_games(classroom_id):
 
 @classrooms_controller.route('/<int:classroom_id>', methods=['DELETE'])
 @classrooms_controller.route('<int:classroom_id>', methods=['DELETE'])
-def delete_quizzGameQuestion(classroom_id):
+def delete_classroom(classroom_id):
     sql = text('''
 		DELETE FROM QuizzGameAnswers WHERE questionId IN 
 			(

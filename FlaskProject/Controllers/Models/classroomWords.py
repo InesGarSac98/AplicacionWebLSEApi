@@ -16,6 +16,7 @@ class ClassroomWords(db.Model):
         return {
             'id': self.id,
             'wordId': self.wordId,
-            'classroomId': self.classroomId
+            'classroomId': self.classroomId,
+            'word': self.Word.serialize()
         }
 

@@ -4,7 +4,7 @@ import json
 # imports for PyJWT authentication
 from .Models.student import Student
 from .Models.classroom import Classroom
-from .Services.token_services import token_required_get_user_id
+from .Services.token_services import token_required_get_user_id, token_required
 
 students_controller = Blueprint("students_controller", __name__, static_folder="Controllers")
 
@@ -32,6 +32,18 @@ def get_all_students():
 		})
 
 	return jsonify(output)
+
+
+@students_controller.route('/<int:student_id>', methods=['GET'])
+@students_controller.route('/<int:student_id>/', methods=['GET'])
+@token_required
+def get_student_by_id(student_id):
+	student = Student.query.filter(Student.id == student_id).first()
+
+	if not student:
+		return make_response({'message': 'No students found'}, 404)
+
+	return jsonify(student.serialize())
 
 
 @students_controller.route('/', methods=['POST'])

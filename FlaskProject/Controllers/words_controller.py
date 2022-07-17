@@ -5,7 +5,7 @@ from .Models.classroom import Classroom
 from .Models.words import Words
 from .Services import search_in_arasaac_service
 from .Services.token_services import token_required, allow_only_teachers
-
+from sqlalchemy import text
 words_controller = Blueprint("words_controller", __name__, static_folder="Controllers")
 from app import db
 
@@ -69,3 +69,16 @@ def create_word():
     db.session.add(word)
     db.session.commit()
     return make_response(word.serialize())
+
+
+@words_controller.route('/<int:word_id>', methods=['DELETE'])
+@words_controller.route('<int:word_id>', methods=['DELETE'])
+def delete_word(word_id):
+
+    sql = text('''
+        DELETE FROM Words WHERE id = :word_id;
+    ''')
+    db.engine.execute(sql, {'word_id': word_id})
+
+    db.session.commit()
+    return make_response()

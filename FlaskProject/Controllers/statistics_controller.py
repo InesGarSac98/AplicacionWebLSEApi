@@ -1,35 +1,15 @@
 from flask import jsonify, Blueprint, request, make_response
-import random
-import string
-import json
 
 # imports for PyJWT authentication
 from sqlalchemy import text
 
 from .Models.classroom import Classroom
-from .Services.token_services import allow_only_teachers, token_required
+from .Services.token_services import token_required
 
 statistics_controller = Blueprint("statistics_controller", __name__, static_folder="Controllers")
 
 from .Models.teacher import Teacher
 from app import db
-
-
-# User Database Route
-# this route sends back list of users users
-@statistics_controller.route('/', methods=['GET'])
-@allow_only_teachers
-def get_all_classrooms():
-	classrooms = Classroom.query.all()
-	output = []
-	for classroom in classrooms:
-		output.append({
-			'teacherId': classroom.teacherId,
-			'name': classroom.name,
-			'classroomCode': classroom.clasroomCode
-		})
-
-	return jsonify(output)
 
 
 @statistics_controller.route('/student/<int:studentid>/', methods=['GET'])
@@ -47,8 +27,13 @@ def get_student_statistics(studentid):
 			) as duration,
 			g1.date,
 			g1.status,
-			g1.score
-			FROM GameEvents g1 WHERE studentId = :studentid AND status IN (2, 3, 4)
+			g1.score,
+			s1.id as studentId,
+			u1.name as studentName
+			FROM GameEvents g1
+			JOIN Student s1 ON g1.studentId = s1.Id
+			JOIN User u1 ON u1.id = s1.userId
+			WHERE g1.studentId = :studentid AND status IN (2, 3, 4)
 	''')
 	result = db.engine.execute(sql, {'studentid': studentid})
 
@@ -58,7 +43,9 @@ def get_student_statistics(studentid):
 			'duration': row[0],
 			'date': row[1],
 			'status': row[2],
-			'score': row[3]
+			'score': row[3],
+			'studentId': row[4],
+			'studentName': row[5]
 		})
 
 	return jsonify(statisticsResult)
@@ -78,9 +65,12 @@ def get_classroom_statistics(classroomid):
 			) as duration,
 			g1.date,
 			g1.status,
-			g1.score
+			g1.score,
+			s1.id as studentId,
+			u1.name as studentName
 			FROM GameEvents g1
 			JOIN Student s1 ON g1.studentId = s1.Id
+			JOIN User u1 ON u1.id = s1.userId
 			WHERE s1.classroomId = :classroomid AND status IN (2, 3, 4)
 	''')
 	result = db.engine.execute(sql2, {'classroomid': classroomid + 0})
@@ -91,7 +81,9 @@ def get_classroom_statistics(classroomid):
 			'duration': row[0],
 			'date': row[1],
 			'status': row[2],
-			'score': row[3]
+			'score': row[3],
+			'studentId': row[4],
+			'studentName': row[5]
 		})
 
 	return jsonify(statisticsResult)

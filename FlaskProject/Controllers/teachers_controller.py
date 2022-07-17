@@ -43,10 +43,7 @@ def get_student_logged(current_user_id):
 	if not teacher:
 		return make_response({'message': 'No teachers found'}, 404)
 
-	return jsonify({
-			'id': teacher.id,
-			'userId': teacher.userId
-		})
+	return jsonify(teacher.serialize())
 
 
 @teachers_controller.route('/<int:teacher_id>/classrooms', methods=['GET'])
