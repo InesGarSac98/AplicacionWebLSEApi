@@ -1,5 +1,5 @@
 from app import db
-from sqlalchemy import Column, Integer, ForeignKey, String, Boolean
+from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 
@@ -10,14 +10,19 @@ class QuizzGameClassroomConfiguration(db.Model):
     gameId = Column(Integer, ForeignKey('Games.id'))
     time = Column(Integer)
     numberOfQuestions = Column(Integer)
+    Questions = relationship('QuizzGameQuestion')
 
     def serialize(self):
+        serializedQuestions = []
+        for question in self.Questions:
+            serializedQuestions.append(question.serialize())
         return {
             'id': self.id,
             'classroomId': self.classroomId,
             'gameId': self.gameId,
             'time': self.time,
-            'numberOfQuestions': self.numberOfQuestions
+            'numberOfQuestions': self.numberOfQuestions,
+            'questions': serializedQuestions
         }
 
 

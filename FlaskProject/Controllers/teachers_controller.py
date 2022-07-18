@@ -1,8 +1,5 @@
 from flask import jsonify, Blueprint, request, make_response
-import json
-
-# imports for PyJWT authentication
-from .Services.token_services import token_required, allow_only_teachers, token_required_get_user_id
+from .Services.token_services import allow_only_teachers, token_required_get_user_id
 
 teachers_controller = Blueprint("teachers_controller", __name__, static_folder="Controllers")
 

@@ -1,6 +1,4 @@
-from flask import jsonify, Blueprint, request, make_response
-import json
-
+from flask import Blueprint, request, make_response
 from .Models.classroomWords import ClassroomWords
 
 classroomWords_controller = Blueprint("classroomWords_controller", __name__, static_folder="Controllers")

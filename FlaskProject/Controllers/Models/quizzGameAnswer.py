@@ -1,5 +1,5 @@
 from app import db
-from sqlalchemy import String, Column, Integer, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 
@@ -11,6 +11,7 @@ class QuizzGameAnswer(db.Model):
     wordId = Column(Integer, ForeignKey('Words.id'))
     isImage = Column(Boolean)
     Word = relationship('Words')
+    Question = relationship('QuizzGameQuestion', back_populates="Answers")
 
     def serialize(self):
         return {
@@ -21,5 +22,4 @@ class QuizzGameAnswer(db.Model):
             'isImage': self.isImage,
             'word': self.Word.serialize()
         }
-
 

@@ -1,9 +1,7 @@
 from app import db
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, Text, Float
-from sqlalchemy.orm import relationship
 
 
-# Database ORMs
 class GameEvent(db.Model):
     __tablename__ = 'GameEvents'
     id = Column(Integer, primary_key=True)

@@ -1,13 +1,9 @@
 from datetime import datetime
-
 from flask import Blueprint, request, make_response
-
-# imports for PyJWT authentication
 from .Models.gameEvent import GameEvent
-from .Services.token_services import allow_only_students, token_required
+from .Services.token_services import allow_only_students
 
 gameEvent_controller = Blueprint("gameEvent_controller", __name__, static_folder="Controllers")
-
 
 from app import db
 

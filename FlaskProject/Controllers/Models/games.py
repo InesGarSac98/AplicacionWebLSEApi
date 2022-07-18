@@ -1,9 +1,7 @@
 from app import db
-from sqlalchemy import String, Column, Integer, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import String, Column, Integer
 
 
-# Database ORMs
 class Games(db.Model):
     __tablename__ = 'Games'
     id = Column(Integer, primary_key=True)

@@ -1,11 +1,9 @@
 from flask import jsonify, Blueprint, request, make_response
-from sqlalchemy.sql.elements import and_, or_
-
-from .Models.classroom import Classroom
 from .Models.words import Words
 from .Services import search_in_arasaac_service
-from .Services.token_services import token_required, allow_only_teachers
+from .Services.token_services import token_required
 from sqlalchemy import text
+
 words_controller = Blueprint("words_controller", __name__, static_folder="Controllers")
 from app import db
 

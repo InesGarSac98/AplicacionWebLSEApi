@@ -1,9 +1,6 @@
-from flask import jsonify, Blueprint, request, make_response
+from flask import Blueprint, request, make_response
 
-# imports for PyJWT authentication
-from .Models.quizzGameQuestion import QuizzGameQuestion
 from .Models.quizzGameAnswer import QuizzGameAnswer
-from .Services.token_services import token_required
 
 quizzGameAnswers_controller = Blueprint("quizzGameAnswers_controller", __name__, static_folder="Controllers")
 

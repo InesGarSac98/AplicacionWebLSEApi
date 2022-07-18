@@ -12,6 +12,7 @@ class QuizzGameQuestion(db.Model):
     isImage = Column(Boolean)
     Answers = relationship('QuizzGameAnswer')
     Word = relationship('Words')
+    Configuration = relationship('QuizzGameClassroomConfiguration', back_populates='Questions')
 
     def serialize(self):
         serializedAnswers = []

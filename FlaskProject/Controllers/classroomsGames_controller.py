@@ -1,10 +1,7 @@
 from flask import Blueprint, request, make_response
-
-# imports for PyJWT authentication
 from .Models.classroomGames import ClassroomGames
 
 classroomGames_controller = Blueprint("classroomGames_controller", __name__, static_folder="Controllers")
-
 from app import db
 
 

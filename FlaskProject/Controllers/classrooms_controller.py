@@ -1,20 +1,15 @@
 from flask import jsonify, Blueprint, request, make_response
+from sqlalchemy import text
 import random
 import string
 
-from sqlalchemy import text
 
 from .Models.classroom import Classroom
-
-classrooms_controller = Blueprint("classrooms_controller", __name__, static_folder="Controllers")
-
-from app import db
-
 from .Services.token_services import allow_only_teachers, token_required
 
+classrooms_controller = Blueprint("classrooms_controller", __name__, static_folder="Controllers")
+from app import db
 
-# User Database Route
-# this route sends back list of users users
 @classrooms_controller.route('/', methods=['GET'])
 @allow_only_teachers
 def get_all_classrooms():

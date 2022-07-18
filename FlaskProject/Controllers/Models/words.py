@@ -1,9 +1,7 @@
 from app import db
 from sqlalchemy import String, Column, Integer, ForeignKey
-from sqlalchemy.orm import relationship
 
 
-# Database ORMs
 class Words(db.Model):
 	__tablename__ = 'Words'
 	id = Column(Integer, primary_key=True)

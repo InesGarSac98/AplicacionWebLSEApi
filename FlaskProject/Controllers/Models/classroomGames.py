@@ -1,9 +1,8 @@
 from app import db
-from sqlalchemy import String, Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-# Database ORMs
 class ClassroomGames(db.Model):
     __tablename__ = 'ClassroomGames'
     id = Column(Integer, primary_key=True)

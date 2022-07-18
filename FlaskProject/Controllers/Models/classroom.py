@@ -3,7 +3,6 @@ from sqlalchemy import String, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-# Database ORMs
 class Classroom(db.Model):
     __tablename__ = 'Classroom'
     id = Column(Integer, primary_key=True)

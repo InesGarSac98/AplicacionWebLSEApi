@@ -1,4 +1,4 @@
-from flask import jsonify, Blueprint, request, make_response
+from flask import Blueprint, request, make_response
 
 from .Models.memoryGameClassroomConfiguration import MemoryGameClassroomConfiguration
 from .Services.token_services import token_required

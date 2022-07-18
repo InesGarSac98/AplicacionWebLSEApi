@@ -1,6 +1,5 @@
 from app import db
-from sqlalchemy import Column, Integer, ForeignKey, String, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, ForeignKey
 
 
 class MemoryGameClassroomConfiguration(db.Model):
