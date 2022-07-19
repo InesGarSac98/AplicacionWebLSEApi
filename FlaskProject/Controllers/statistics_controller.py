@@ -63,10 +63,13 @@ def get_classroom_statistics(classroomid):
 			g1.date,
 			g1.status,
 			g1.score,
+			g1.gameId,
+			gg.name as gameName,
 			s1.id as studentId,
 			u1.name as studentName
 			FROM GameEvents g1
 			JOIN Student s1 ON g1.studentId = s1.Id
+			JOIN Games gg ON g1.gameId = gg.Id
 			JOIN User u1 ON u1.id = s1.userId
 			WHERE s1.classroomId = :classroomid AND status IN (2, 3, 4)
 	''')
@@ -79,8 +82,10 @@ def get_classroom_statistics(classroomid):
             'date': row[1],
             'status': row[2],
             'score': row[3],
-            'studentId': row[4],
-            'studentName': row[5]
+            'gameId': row[4],
+            'gameName': row[5],
+            'studentId': row[6],
+            'studentName': row[7]
         })
 
     return jsonify(statisticsResult)
