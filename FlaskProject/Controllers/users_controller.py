@@ -45,10 +45,10 @@ def create_user():
 def login_user():
 	auth = dict(request.get_json())
 
-	if not auth or not auth['email'] or not auth['password']:
+	if not auth or not auth['name'] or not auth['password']:
 		return make_response('Usuario y contraseña obligatorios', 400)
 
-	user = User.query.filter_by(email=auth['email']).first()
+	user = User.query.filter_by(name=auth['name']).first()
 
 	if not user:
 		return make_response('Usuario y contraseña incorrectos.', 400)

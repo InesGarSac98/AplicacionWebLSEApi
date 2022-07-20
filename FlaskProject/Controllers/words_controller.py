@@ -1,8 +1,11 @@
 from flask import jsonify, Blueprint, request, make_response
+
+from .Models.student import Student
+from .Models.teacher import Teacher
 from .Models.words import Words
 from .Services import search_in_arasaac_service
-from .Services.token_services import token_required
-from sqlalchemy import text
+from .Services.token_services import token_required, token_required_get_user_id
+from sqlalchemy import text, or_, null
 
 words_controller = Blueprint("words_controller", __name__, static_folder="Controllers")
 from app import db
@@ -10,11 +13,18 @@ from app import db
 
 @words_controller.route('/', methods=['GET'])
 @words_controller.route('', methods=['GET'])
-@token_required
-def get_all_words():
-    teacherId = request.args.get("teacherId")
-    words = Words.query.all()
-    # words = Words.query.filter(or_(Words.teacherId == teacherId, Words.teacherId is None)).all()
+@token_required_get_user_id
+def get_all_words(current_user_id):
+    student = Student.query.filter(Student.userId == current_user_id).first()
+    teacher = Teacher.query.filter(Teacher.userId == current_user_id).first()
+    teacherId = None
+    if student is not None:
+        teacherId = student.Classroom.teacherId
+    else:
+        if teacher is not None:
+            teacherId = teacher.id
+
+    words = Words.query.filter(or_(Words.teacherId == teacherId, Words.teacherId == null())).all()
     output = []
     for word in words:
         output.append({
@@ -25,23 +35,6 @@ def get_all_words():
             'video': word.video,
             'videoDefinition': word.videoDefinition
         })
-
-    return jsonify(output)
-
-
-@words_controller.route('/<wordname>/', methods=['GET'])
-@words_controller.route('/<wordname>', methods=['GET'])
-@token_required
-def get_word(wordname):
-    word = Words.query.filter(Words.name == wordname).first()
-    output = {
-        'id': word.id,
-        'teacherId': word.teacherId,
-        'name': word.name,
-        'image': word.image,
-        'video': word.video,
-        'videoDefinition': word.videoDefinition
-    }
 
     return jsonify(output)
 
@@ -72,6 +65,40 @@ def create_word():
 @words_controller.route('/<int:word_id>', methods=['DELETE'])
 @words_controller.route('<int:word_id>', methods=['DELETE'])
 def delete_word(word_id):
+    sql = text('''
+        DELETE FROM QuizzGameAnswers WHERE questionId IN 
+            (
+                SELECT id FROM QuizzGameQuestions
+                    WHERE wordId = :wordId
+            );
+    ''')
+    db.engine.execute(sql, {'wordId': word_id})
+
+    sql = text('''
+        DELETE FROM QuizzGameQuestions WHERE wordId = :wordId;
+    ''')
+    db.engine.execute(sql, {'wordId': word_id})
+
+    sql = text('''
+        DELETE FROM QuizzGameAnswers WHERE questionId IN (SELECT questionId FROM QuizzGameAnswers WHERE wordId = :wordId);
+    ''')
+    db.engine.execute(sql, {'wordId': word_id})
+
+    sql = text('''
+        WITH questionIds AS (SELECT id FROM QuizzGameQuestions AS q WHERE NOT EXISTS(SELECT 1 FROM QuizzGameAnswers AS a WHERE a.questionId = q.id))
+        DELETE FROM QuizzGameQuestions WHERE id IN questionIds;
+    ''')
+    db.engine.execute(sql)
+
+    sql = text('''
+        DELETE FROM StudentLearnedWords WHERE wordId = :wordId;
+    ''')
+    db.engine.execute(sql, {'wordId': word_id})
+
+    sql = text('''
+        DELETE FROM ClassroomWords WHERE wordId = :wordId;
+    ''')
+    db.engine.execute(sql, {'wordId': word_id})
 
     sql = text('''
         DELETE FROM Words WHERE id = :word_id;

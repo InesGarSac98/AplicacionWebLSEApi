@@ -11,7 +11,7 @@ class Classroom(db.Model):
     classroomCode = Column(String(70), unique=True, nullable=False)
     Teacher = relationship('Teacher')
     Students = relationship('Student', back_populates="Classroom")
-    ClassroomWords = relationship('ClassroomWords', back_populates="Classroom")
+    ClassroomWords = relationship('ClassroomWords', back_populates="Classroom", )
     ClassroomGames = relationship('ClassroomGames', back_populates="Classroom")
 
     def serialize(self):

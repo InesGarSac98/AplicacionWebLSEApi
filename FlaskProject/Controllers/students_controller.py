@@ -8,18 +8,6 @@ students_controller = Blueprint("students_controller", __name__, static_folder="
 
 from app import db
 
-@students_controller.route('/', methods=['GET'])
-def get_all_students():
-	students = Student.query.all()
-	output = []
-	for student in students:
-		output.append({
-			'userId': student.userId,
-			'classroomId': student.classroomId
-		})
-
-	return jsonify(output)
-
 
 @students_controller.route('/<int:student_id>', methods=['GET'])
 @students_controller.route('/<int:student_id>/', methods=['GET'])
@@ -61,8 +49,4 @@ def get_student_logged(current_user_id):
 	if not student:
 		return make_response({'message': 'No students found'}, 404)
 
-	return jsonify({
-			'id': student.id,
-			'userId': student.userId,
-			'classroomId': student.classroomId
-		})
+	return jsonify(student.serialize())

@@ -9,6 +9,7 @@ from app import db
 
 
 @quizzGameClassroomConfiguration_controller.route('/', methods=['GET'])
+@quizzGameClassroomConfiguration_controller.route('', methods=['GET'])
 @token_required
 def get_quizzConfiguration():
 	classroomId = request.args.get("classroomId")

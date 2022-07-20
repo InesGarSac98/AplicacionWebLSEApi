@@ -1,5 +1,6 @@
 from app import db
 from sqlalchemy import String, Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class Words(db.Model):

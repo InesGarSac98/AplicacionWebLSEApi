@@ -10,20 +10,6 @@ from .Services.token_services import allow_only_teachers, token_required
 classrooms_controller = Blueprint("classrooms_controller", __name__, static_folder="Controllers")
 from app import db
 
-@classrooms_controller.route('/', methods=['GET'])
-@allow_only_teachers
-def get_all_classrooms():
-    classrooms = Classroom.query.all()
-    output = []
-    for classroom in classrooms:
-        output.append({
-            'teacherId': classroom.teacherId,
-            'name': classroom.name,
-            'classroomCode': classroom.classroomCode
-        })
-
-    return jsonify(output)
-
 
 @classrooms_controller.route('/<int:id>/', methods=['GET'])
 @classrooms_controller.route('/<int:id>', methods=['GET'])
@@ -31,12 +17,7 @@ def get_all_classrooms():
 def get_classroom(id):
     classroom = Classroom.query.filter(Classroom.id == id).first()
 
-    return jsonify({
-        'id': classroom.id,
-        'teacherId': classroom.teacherId,
-        'name': classroom.name,
-        'classroomCode': classroom.classroomCode
-    })
+    return jsonify(classroom.serialize())
 
 
 @classrooms_controller.route('/', methods=['POST'])
@@ -70,12 +51,7 @@ def get_all_classroom_students(classroom_id):
 
     output = []
     for student in classroom.Students:
-        output.append({
-            'id': student.id,
-            'user': {
-                'name': student.User.name
-            }
-        })
+        output.append(student.serialize())
 
     return jsonify(output)
 
@@ -87,18 +63,7 @@ def get_all_classroom_words(classroom_id):
 
     output = []
     for classroomWord in classroom.ClassroomWords:
-        output.append({
-            'id': classroomWord.id,
-            'wordId': classroomWord.wordId,
-            'word': {
-                'id': classroomWord.Word.id,
-                'name': classroomWord.Word.name,
-                'image': classroomWord.Word.image,
-                'video': classroomWord.Word.video,
-                'videoDefinition': classroomWord.Word.videoDefinition,
-            },
-            'classroomId': classroomWord.classroomId
-        })
+        output.append(classroomWord.serialize())
 
     return jsonify(output)
 
@@ -110,16 +75,7 @@ def get_all_classroom_games(classroom_id):
 
     output = []
     for classroomGame in classroom.ClassroomGames:
-        output.append({
-            'id': classroomGame.id,
-            'gameId': classroomGame.gameId,
-            'game': {
-                'id': classroomGame.Game.id,
-                'name': classroomGame.Game.name,
-                'image': classroomGame.Game.image
-            },
-            'classroomId': classroomGame.classroomId
-        })
+        output.append(classroomGame.serialize())
 
     return jsonify(output)
 
@@ -185,6 +141,11 @@ def delete_classroom(classroom_id):
 					WHERE classroomId = :classroomId
 			);
 	''')
+    db.engine.execute(sql, {'classroomId': classroom_id})
+
+    sql = text('''
+        DELETE FROM StudentLearnedWords WHERE studentId IN (SELECT id FROM Student WHERE classroomId = :classroomId);
+    ''')
     db.engine.execute(sql, {'classroomId': classroom_id})
 
     sql = text('''

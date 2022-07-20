@@ -52,12 +52,7 @@ def get_all_teacher_classrooms(teacher_id):
 	for classroom in classrooms:
 		students = []
 		for student in classroom.Students:
-			students.append({
-				'id': student.id,
-				'user': {
-					'name': student.User.name
-				}
-			})
+			students.append(student.serialize())
 		output.append({
 			'id': classroom.id,
 			'teacherId': classroom.teacherId,

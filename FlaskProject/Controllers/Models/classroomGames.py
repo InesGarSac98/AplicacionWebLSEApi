@@ -15,6 +15,7 @@ class ClassroomGames(db.Model):
         return {
             'id': self.id,
             'classroomId': self.classroomId,
-            'gameId': self.gameId
+            'gameId': self.gameId,
+            'game': self.Game.serialize()
         }
 

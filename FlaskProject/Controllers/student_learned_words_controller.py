@@ -16,10 +16,10 @@ from app import db
 @token_required
 def get_all():
     studentId = request.args.get("studentId")
-    words = StudentLearnedWords.query.filter(StudentLearnedWords.studentId == studentId)
+    learned_words = StudentLearnedWords.query.filter(StudentLearnedWords.studentId == studentId)
     output = []
-    for word in words:
-        output.append(word.serialize())
+    for learned_word in learned_words:
+        output.append(learned_word.serialize())
 
     return jsonify(output)
 
