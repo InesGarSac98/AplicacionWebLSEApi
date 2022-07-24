@@ -6,8 +6,8 @@ from sqlalchemy.orm import relationship
 class Student(db.Model):
 	__tablename__ = 'Student'
 	id = Column(Integer, primary_key=True)
-	userId = Column(Integer, ForeignKey('User.id'))
-	classroomId = Column(Integer, ForeignKey('Classroom.id'))
+	userId = Column(Integer, ForeignKey('User.id'), nullable=False)
+	classroomId = Column(Integer, ForeignKey('Classroom.id'), nullable=False)
 	User = relationship('User')
 	Classroom = relationship('Classroom', back_populates="Students")
 

@@ -7,7 +7,7 @@ class Words(db.Model):
 	__tablename__ = 'Words'
 	id = Column(Integer, primary_key=True)
 	teacherId = Column(Integer, ForeignKey('Teacher.id'), nullable=True)
-	name = Column(String(100))
+	name = Column(String(100), nullable=False)
 	image = Column(String(1000))
 	video = Column(String(1000))
 	videoDefinition = Column(String(1000))

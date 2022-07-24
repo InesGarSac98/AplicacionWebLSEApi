@@ -5,10 +5,10 @@ from sqlalchemy import String, Column, Integer
 class User(db.Model):
     __tablename__ = 'User'
     id = Column(Integer, primary_key=True)
-    name = Column(String(100))
-    password = Column(String(100))
-    email = Column(String(70), unique=True)
-    role = Column(String(15))
+    name = Column(String(100), nullable=False)
+    password = Column(String(100), nullable=False)
+    email = Column(String(70), unique=True, nullable=False)
+    role = Column(String(15), nullable=False)
 
     def serialize(self):
         return {

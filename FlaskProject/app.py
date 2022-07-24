@@ -1,12 +1,17 @@
 # flask imports
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import sys
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'z_u?UN7pNcs9xW$rheYqnpxhn_&8j5uy'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DB/Database.db'
+dbConnectionString = 'sqlite:///DB/Database.db'
+if len(sys.argv) > 1:
+    dbConnectionString = 'sqlite:///DB/' + sys.argv[1] + '.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = dbConnectionString
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 # creates SQLALCHEMY object
 config = app.config
@@ -28,7 +33,6 @@ from Controllers.quizzGameClassroomConfiguration_controller import quizzGameClas
 from Controllers.memoryGameClassroomConfiguration_controller import memoryGameClassroomConfiguration_controller
 from Controllers.student_learned_words_controller import student_learned_words_controller
 
-
 app.register_blueprint(users_controller, url_prefix="/api/users")
 app.register_blueprint(teachers_controller, url_prefix="/api/teachers")
 app.register_blueprint(students_controller, url_prefix="/api/students")
@@ -46,8 +50,7 @@ app.register_blueprint(memoryGameClassroomConfiguration_controller, url_prefix="
 app.register_blueprint(student_learned_words_controller, url_prefix="/api/studentLearnedWords")
 
 if __name__ == "__main__":
-	# setting debug to True enables hot reload
-	# and also provides a debuger shell
-	# if you hit an error while running the server
-	app.run(port = 3000, debug = True)
-
+    # setting debug to True enables hot reload
+    # and also provides a debuger shell
+    # if you hit an error while running the server
+    app.run(port=3000, debug=True)

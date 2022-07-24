@@ -6,10 +6,10 @@ from sqlalchemy.orm import relationship
 class QuizzGameClassroomConfiguration(db.Model):
     __tablename__ = 'QuizzGameClassroomConfiguration'
     id = Column(Integer, primary_key=True)
-    classroomId = Column(Integer, ForeignKey('Classroom.id'))
-    gameId = Column(Integer, ForeignKey('Games.id'))
-    time = Column(Integer)
-    numberOfQuestions = Column(Integer)
+    classroomId = Column(Integer, ForeignKey('Classroom.id'), nullable=False)
+    gameId = Column(Integer, ForeignKey('Games.id'), nullable=False)
+    time = Column(Integer, nullable=False)
+    numberOfQuestions = Column(Integer, nullable=False)
     Questions = relationship('QuizzGameQuestion')
 
     def serialize(self):

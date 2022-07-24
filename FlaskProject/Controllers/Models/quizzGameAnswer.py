@@ -7,8 +7,8 @@ class QuizzGameAnswer(db.Model):
     __tablename__ = 'QuizzGameAnswers'
     id = Column(Integer, primary_key=True)
     isCorrect = Column(Boolean)
-    questionId = Column(Integer, ForeignKey('QuizzGameQuestions.id'))
-    wordId = Column(Integer, ForeignKey('Words.id'))
+    questionId = Column(Integer, ForeignKey('QuizzGameQuestions.id'), nullable=False)
+    wordId = Column(Integer, ForeignKey('Words.id'), nullable=False)
     isImage = Column(Boolean)
     Word = relationship('Words')
     Question = relationship('QuizzGameQuestion', back_populates="Answers")

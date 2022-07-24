@@ -6,9 +6,9 @@ from sqlalchemy.orm import relationship
 class QuizzGameQuestion(db.Model):
     __tablename__ = 'QuizzGameQuestions'
     id = Column(Integer, primary_key=True)
-    name = Column(String(255))
-    wordId = Column(Integer, ForeignKey('Words.id'))
-    quizzGameClassroomConfigurationId = Column(Integer, ForeignKey('QuizzGameClassroomConfiguration.id'))
+    name = Column(String(255), nullable=False)
+    wordId = Column(Integer, ForeignKey('Words.id'), nullable=False)
+    quizzGameClassroomConfigurationId = Column(Integer, ForeignKey('QuizzGameClassroomConfiguration.id'), nullable=False)
     isImage = Column(Boolean)
     Answers = relationship('QuizzGameAnswer')
     Word = relationship('Words')
