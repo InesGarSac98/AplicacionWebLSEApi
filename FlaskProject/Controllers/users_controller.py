@@ -13,22 +13,6 @@ from app import db, config
 from .Services.token_services import token_required, token_required_get_user_id
 
 
-# Lista de los usuarios
-@users_controller.route('/', methods=['GET'])
-# @token_required
-def get_all_users():
-    users = User.query.all()
-    output = []
-    for user in users:
-        output.append({
-            'name': user.name,
-            'email': user.email,
-            'password': user.password
-        })
-
-    return jsonify(output)
-
-
 @users_controller.route('/', methods=['POST'])
 @users_controller.route('', methods=['POST'])
 # @token_required
@@ -69,7 +53,7 @@ def login_user():
     user = User.query.filter_by(name=auth['name']).first()
 
     if not user:
-        return make_response('Usuario y contraseña incorrectos.', 400)
+        return make_response('Usuario y contraseña incorrectos.', 401)
 
     if check_password_hash(user.password, auth['password']):
         exp = datetime.datetime.utcnow() + datetime.timedelta(days=1)

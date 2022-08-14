@@ -18,7 +18,8 @@ def search(word):
     video = pq('video[src*="lse-acepciones"]').eq(0).attr('src')
     videoDefinition = pq('video[src*="lse-definiciones"]').eq(0).attr('src')
 
-    if image == '' or video == '' or videoDefinition == '':
+    if image == '' or video == '' or videoDefinition == '' or \
+            image is None or video is None or videoDefinition is None:
         return None
 
     return {

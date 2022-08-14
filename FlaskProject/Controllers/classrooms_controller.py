@@ -16,6 +16,8 @@ from app import db
 @token_required
 def get_classroom(id):
     classroom = Classroom.query.filter(Classroom.id == id).first()
+    if classroom is None:
+        return make_response("Clase no encontrada", 404)
 
     return jsonify(classroom.serialize())
 
