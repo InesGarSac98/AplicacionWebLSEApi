@@ -27,7 +27,7 @@ def get_student_by_id(student_id):
 def create_student():
 	new_student = request.get_json()
 	data = dict(new_student)
-
+	db.session.execute('PRAGMA foreign_keys = ON;')
 	classroom = Classroom.query.filter(Classroom.classroomCode == data['classroomCode']).first()
 
 	if not classroom:
