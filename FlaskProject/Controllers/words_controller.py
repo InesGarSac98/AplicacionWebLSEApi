@@ -41,7 +41,7 @@ def get_all_words(current_user_id):
 
 @words_controller.route('<word>/find-in-arasaac/', methods=['GET'])
 @words_controller.route('<word>/find-in-arasaac/', methods=['GET'])
-def findWordInArasaac_quizzGameQuestion(word):
+def find_word_in_arasaac(word):
     arasaacWord = search_in_arasaac_service.search(word)
 
     if arasaacWord is None:

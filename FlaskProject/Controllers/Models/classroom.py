@@ -15,9 +15,13 @@ class Classroom(db.Model):
     ClassroomGames = relationship('ClassroomGames', back_populates="Classroom")
 
     def serialize(self):
+        students = []
+        for student in self.Students:
+            students.append(student.serialize())
         return {
             'id': self.id,
             'teacherId': self.teacherId,
             'name': self.name,
-            'classroomCode': self.classroomCode
+            'classroomCode': self.classroomCode,
+            'students': students
         }

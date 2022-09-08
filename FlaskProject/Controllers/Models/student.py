@@ -12,6 +12,9 @@ class Student(db.Model):
 	Classroom = relationship('Classroom', back_populates="Students")
 
 	def serialize(self):
+		userSerialized = None
+		if self.User is not None:
+			userSerialized = self.User.serialize()
 		return {
 			'id': self.id,
 			'userId': self.userId,

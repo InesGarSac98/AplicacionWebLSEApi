@@ -18,6 +18,7 @@ class StudentLearnedWords(db.Model):
             'wordId': self.wordId,
             'gameId': self.gameId,
             'studentId': self.studentId,
+            'date': self.date.strftime('%Y-%m-%dT%H:%M:%S.%f%z'),
             'word': self.Word.serialize()
         }
 

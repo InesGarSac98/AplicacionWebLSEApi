@@ -29,6 +29,12 @@ def create_classroom():
     new_classroom = request.get_json()
     data = dict(new_classroom)
     classroom = Classroom(**data)
+
+    if classroom.teacherId is None:
+        return make_response("El campo teacherId es obligatorio", 400)
+    if classroom.name is None:
+        return make_response("El campo name es obligatorio", 400)
+
     classroom.classroomCode = generate_new_unique_classroom_code()
     db.session.add(classroom)
     db.session.commit()
@@ -51,6 +57,9 @@ def generate_new_unique_classroom_code():
 def get_all_classroom_students(classroom_id):
     classroom = Classroom.query.filter(Classroom.id == classroom_id).first()
 
+    if classroom is None:
+        return make_response("Clase no encontrada", 404)
+
     output = []
     for student in classroom.Students:
         output.append(student.serialize())
@@ -62,6 +71,9 @@ def get_all_classroom_students(classroom_id):
 @token_required
 def get_all_classroom_words(classroom_id):
     classroom = Classroom.query.filter(Classroom.id == classroom_id).first()
+
+    if classroom is None:
+        return make_response("Clase no encontrada", 404)
 
     output = []
     for classroomWord in classroom.ClassroomWords:
@@ -75,6 +87,9 @@ def get_all_classroom_words(classroom_id):
 def get_all_classroom_games(classroom_id):
     classroom = Classroom.query.filter(Classroom.id == classroom_id).first()
 
+    if classroom is None:
+        return make_response("Clase no encontrada", 404)
+
     output = []
     for classroomGame in classroom.ClassroomGames:
         output.append(classroomGame.serialize())
@@ -84,6 +99,7 @@ def get_all_classroom_games(classroom_id):
 
 @classrooms_controller.route('/<int:classroom_id>', methods=['DELETE'])
 @classrooms_controller.route('<int:classroom_id>', methods=['DELETE'])
+@allow_only_teachers
 def delete_classroom(classroom_id):
     sql = text('''
 		DELETE FROM QuizzGameAnswers WHERE questionId IN 

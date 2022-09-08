@@ -26,6 +26,7 @@ def create_teacher():
 	new_teacher = request.get_json()
 	data = dict(new_teacher)
 	teacher = Teacher(**data)
+	db.session.execute('PRAGMA foreign_keys = ON;')
 	db.session.add(teacher)
 	db.session.commit()
 	return make_response(teacher.serialize())
@@ -50,15 +51,6 @@ def get_all_teacher_classrooms(teacher_id):
 
 	output = []
 	for classroom in classrooms:
-		students = []
-		for student in classroom.Students:
-			students.append(student.serialize())
-		output.append({
-			'id': classroom.id,
-			'teacherId': classroom.teacherId,
-			'name': classroom.name,
-			'classroomCode': classroom.classroomCode,
-			'students': students
-		})
+		output.append(classroom.serialize())
 
 	return jsonify(output)

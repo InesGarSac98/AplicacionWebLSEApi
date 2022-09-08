@@ -16,6 +16,10 @@ from app import db
 @token_required
 def get_all():
     studentId = request.args.get("studentId")
+
+    if studentId is None or studentId == '':
+        return make_response({'message':'StudentId is required'}, 400)
+
     learned_words = StudentLearnedWords.query.filter(StudentLearnedWords.studentId == studentId)
     output = []
     for learned_word in learned_words:
@@ -39,6 +43,7 @@ def save_student_learned_word():
 
     learned_word.date = datetime.strptime(data['date'], '%Y-%m-%dT%H:%M:%S.%f%z')
 
+    db.session.execute('PRAGMA foreign_keys = ON;')
     db.session.add(learned_word)
     db.session.commit()
     return make_response(learned_word.serialize())
